@@ -8,6 +8,16 @@ You can see tutorial to make this repository in [here](https://medium.com/easyre
 
 ## How to run
 
+*change 10.125.75.129 to ip or host
+
+docker network create kafka
+
+docker run --network=kafka -p 8092:8080 --name kafka-ui -e KAFKA_CLUSTERS_0_NAME=local -e KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=10.125.75.129:9092 -d provectuslabs/kafka-ui:latest
+
+docker run --network=kafka -d --name zookeeper -e ZOOKEEPER_CLIENT_PORT=2181 -p 2181:2181 confluentinc/cp-zookeeper:latest
+
+docker run --network=kafka -d -p 9092:9092 --name kafka -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://10.125.75.129:9092 -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 confluentinc/cp-kafka:latest
+
 ```bash
 # clone this repo
 git clone git@github.com:mufti1/kafka-example.git
