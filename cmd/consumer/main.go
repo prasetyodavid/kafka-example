@@ -19,7 +19,7 @@ func main() {
 
 	kafkaConfig := getKafkaConfig("", "")
 
-	consumers, err := sarama.NewConsumer([]string{"kafka:9092"}, kafkaConfig)
+	consumers, err := sarama.NewConsumer([]string{"10.125.75.129:9092"}, kafkaConfig)
 	if err != nil {
 		logrus.Errorf("Error create kakfa consumer got error %v", err)
 	}
@@ -30,12 +30,14 @@ func main() {
 		}
 	}()
 
-	kafkaConsumer := &consumer.KafkaConsumer{
+	kafkaConsumerBank := &consumer.KafkaConsumer{
 		Consumer: consumers,
 	}
 
 	signals := make(chan os.Signal, 1)
-	kafkaConsumer.Consume([]string{"test_topic"}, signals)
+	kafkaConsumerBank.Consume([]string{
+		"banking_notification",
+		"customer_notification"}, signals)
 }
 
 func getKafkaConfig(username, password string) *sarama.Config {

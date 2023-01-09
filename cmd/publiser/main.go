@@ -17,7 +17,7 @@ func main() {
 	logrus.SetFormatter(customFormatter)
 
 	kafkaConfig := getKafkaConfig("", "")
-	producers, err := sarama.NewSyncProducer([]string{"kafka:9092"}, kafkaConfig)
+	producers, err := sarama.NewSyncProducer([]string{"10.125.75.129:9092"}, kafkaConfig)
 	if err != nil {
 		logrus.Errorf("Unable to create kafka producer got error %v", err)
 		return
@@ -36,8 +36,13 @@ func main() {
 	}
 
 	for i := 1; i <= 10; i++ {
-		msg := fmt.Sprintf("message number %v", i)
-		err := kafka.SendMessage("test_topic", msg)
+		msg := fmt.Sprintf("Standart cust. message num %v", i)
+		err := kafka.SendMessage("customer_notification", msg)
+		if err != nil {
+			panic(err)
+		}
+		msg = fmt.Sprintf("Banking message %v", i)
+		err = kafka.SendMessage("banking_notification", msg)
 		if err != nil {
 			panic(err)
 		}
